@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -8,14 +8,17 @@ import {
 import { Text, View, Item, Input, Button } from "native-base";
 import { useForm } from "react-hook-form";
 import MountainBackground from "../assets/nightsky.jpg";
+import AuthContext from '../components/Auth/AuthContext'
 function HomeScreen({ navigation }) {
+  const {signIn} = useContext(AuthContext)
   const { register, setValue, handleSubmit, errors } = useForm();
   const onSubmit = data => {
+    signIn(data)
     console.log(data, 'data')
   }
   
   React.useEffect(() => {
-    register({ name: 'username'}, { required: true });
+    register({ name: 'email'}, { required: true });
     register({ name: 'password'}, { required: true });
   }, [register])
 
@@ -34,9 +37,9 @@ function HomeScreen({ navigation }) {
             <Input
               autoCapitalize="none"
               placeholderTextColor="snow"
-              placeholder="username"
+              placeholder="email"
               style={{ color: "white" }}
-              onChangeText={text => setValue('username', text, true)}
+              onChangeText={text => setValue('email', text, true)}
             />
           </Item>
           <Item rounded style={{ width: "90%", marginTop: 10 }}>
@@ -53,11 +56,18 @@ function HomeScreen({ navigation }) {
             warning
             block
             rounded
-            color="black"
             style={{ marginHorizontal: 20, marginTop: 20 }}
             onPress={handleSubmit(onSubmit)}
           >
             <Text>LOGIN</Text>
+          </Button>
+          <Button
+            block
+            rounded
+            style={{ marginHorizontal: 20, marginTop: 10, backgroundColor: 'snow'}}
+            onPress={() => navigation.navigate('SignUp')}
+          >
+            <Text style={{color: '#f0ad4e'}}>Sign Up</Text>
           </Button>
         </View>
       </KeyboardAvoidingView>
