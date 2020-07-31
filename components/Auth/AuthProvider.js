@@ -2,7 +2,6 @@ import React, { Children, useState, useEffect } from "react";
 import AuthContext from "./AuthContext";
 import AsyncStorage from "@react-native-community/async-storage";
 import Axios from "axios";
-import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 
 const AuthProvider = ({ children }) => {
   const [user, setuser] = useState(null);
@@ -10,7 +9,7 @@ const AuthProvider = ({ children }) => {
   const instance = Axios.create({
     baseURL: "http://localhost:3000/api",
     headers: {
-      Authorization: AsyncStorage.getItem("token"),
+      Authorization: token,
     },
   });
 
@@ -23,15 +22,14 @@ const AuthProvider = ({ children }) => {
       .catch((e) => {
         return console.log(e);
       });
-    debugger;
     return result;
   };
   const getToken = async () => {
     const token = await AsyncStorage.getItem("token");
     settoken(token);
-    // getUserInfo()
   };
   useEffect(() => {
+    console.log('useeffect')
     getToken();
     getUserInfo()
   }, []);
@@ -41,15 +39,21 @@ const AuthProvider = ({ children }) => {
       .post("/users/login", payload)
       .then((res) => res.data);
     const { id } = result;
-    console.log("signIn -> token", token);
-    // set token
-    await AsyncStorage.setItem(id, "token");
+    await AsyncStorage.setItem("token", id);
+    settoken(id);
     instance.defaults.headers["Authorization"] = id;
     getUserInfo();
     return;
   };
+
+  const signOut = async () => {
+    await AsyncStorage.removeItem('token')
+    settoken(null)
+    setuser(null)
+  }
   const authFunctions = {
     signIn,
+    signOut,
     user,
   };
   return (

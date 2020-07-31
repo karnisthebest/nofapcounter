@@ -48,7 +48,6 @@ const AuthCheck = () => {
   }, [])
 //   const token = await AsyncStorage.getItem('token')
 //   console.log("AuthCheck -> token", token)
-  console.log("AuthCheck -> user", user)
   return (
     <React.Fragment>
       {!user ? <AuthScreens /> : <AppScreens />}
