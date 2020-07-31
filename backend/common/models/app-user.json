@@ -1,0 +1,23 @@
+{
+  "name": "AppUser",
+  "base": "User",
+  "idInjection": true,
+  "http": {
+    "path": "Users"
+  },
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "token": {
+      "type": "string"
+    },
+    "fullname": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
